@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peta LST 2024</title>
+    <title>Peta LST</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         #map {
@@ -55,11 +55,11 @@
         // Fungsi untuk styling GeoJSON
         function style(feature) {
             return {
-                fillColor: getColor(feature.properties.gridcode), // Mengambil warna dari atribut gridcode
-                weight: 0, // Hapus outline
-                opacity: 1, // Opacity poligon
-                color: 'transparent', // Warna outline diatur ke transparan
-                fillOpacity: 1 // Mengatur opacity isi menjadi 1 (tidak transparan)
+                fillColor: getColor(feature.properties.gridcode),
+                weight: 0,
+                opacity: 1,
+                color: 'transparent',
+                fillOpacity: 1
             };
         }
 
@@ -67,25 +67,22 @@
         var layers = {};
         var years = [2024, 2022, 2020, 2018, 2016, 2014]; // Tahun untuk file GeoJSON
 
+        var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map); // Kontrol layer
+
         years.forEach(year => {
+            // Fetch data dan tambahkan layer ke kontrol
             fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
                 .then(response => response.json())
                 .then(data => {
                     layers[year] = L.geoJSON(data, { style: style }).addTo(map).hide(); // Menyembunyikan layer awal
+                    layerControl.addOverlay(layers[year], `Peta LST ${year}`); // Menambahkan ke kontrol
                 })
                 .catch(err => console.error(err)); // Menangani kesalahan
         });
 
-        // Fungsi untuk menambahkan kontrol layer
-        var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map);
-
-        years.forEach(year => {
-            layerControl.addOverlay(layers[year], `Peta LST ${year}`, true); // Menambahkan layer ke kontrol
-        });
-
         // Fungsi untuk menambahkan legenda
         function addLegend() {
-            var legend = L.control({ position: 'bottomright' }); // Mengubah posisi ke kanan bawah
+            var legend = L.control({ position: 'bottomright' });
 
             legend.onAdd = function () {
                 var div = L.DomUtil.create('div', 'legend');
