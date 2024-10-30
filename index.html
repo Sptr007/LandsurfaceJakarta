@@ -6,13 +6,13 @@
     <title>Peta LST</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
-        /* Mengatur body dan html untuk menghilangkan margin */
-        html, body {
-            height: 100%; /* Memastikan tinggi body 100% */
-            margin: 0; /* Menghapus margin */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* Mengatur tinggi body dan html untuk mengisi layar */
         }
         #map {
-            height: calc(100% - 60px); /* Mengatur tinggi peta */
+            height: calc(100% - 50px); /* Mengatur tinggi peta mengisi sisa layar */
             width: 100%; /* Mengatur lebar peta */
         }
         .legend {
@@ -32,24 +32,21 @@
         #controls {
             position: absolute;
             top: 10px;
-            left: 10px; /* Kembali ke posisi semula */
+            left: 10px; /* Mengatur posisi kontrol */
             z-index: 1000; /* Pastikan kontrol di atas peta */
             background: white;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
-        #controls label {
-            margin-right: 10px;
-        }
         .leaflet-control-zoom {
-            bottom: -50px; /* Menurunkan kontrol zoom */
+            bottom: 50px; /* Menurunkan kontrol zoom */
         }
     </style>
 </head>
 <body>
     <div id="controls">
-        <label for="yearSelector">Land Surface Temperature DKI Jakarta Tahun:</label>
+        <label for="yearSelector">Land Surface Temperature Tahun:</label>
         <select id="yearSelector">
             <option value="">Pilih Tahun</option>
             <option value="2024">2024</option>
