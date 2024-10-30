@@ -70,7 +70,6 @@
         var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map); // Kontrol layer
 
         years.forEach(year => {
-            // Fetch data dan tambahkan layer ke kontrol
             fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
                 .then(response => response.json())
                 .then(data => {
@@ -100,6 +99,16 @@
 
         // Menambahkan legenda ke peta
         addLegend();
+
+        // Menampilkan layer yang dipilih dan menyembunyikan yang lain
+        map.on('overlayadd', function (e) {
+            for (var year in layers) {
+                if (layers.hasOwnProperty(year) && layers[year] !== e.layer) {
+                    map.removeLayer(layers[year]);
+                }
+            }
+            map.addLayer(e.layer);
+        });
     </script>
 </body>
 </html>
