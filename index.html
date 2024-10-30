@@ -27,7 +27,7 @@
         #controls {
             position: absolute;
             top: 10px;
-            left: 150px; /* Digeser lebih jauh ke kanan */
+            left: 10px; /* Kembali ke posisi semula */
             z-index: 1000; /* Pastikan kontrol di atas peta */
             background: white;
             padding: 10px;
@@ -36,6 +36,9 @@
         }
         #controls label {
             margin-right: 10px;
+        }
+        .leaflet-control-zoom {
+            bottom: 50px; /* Menurunkan kontrol zoom */
         }
     </style>
 </head>
