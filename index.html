@@ -30,12 +30,12 @@
         // Fungsi untuk mengatur warna berdasarkan suhu
         function getColor(gridcode) {
             switch (gridcode) {
-                case 1: return '#A0D7E8'; // Biru Muda - Suhu dingin
-                case 2: return '#A3D5D3'; // Hijau Mint - Sedikit lebih hangat
-                case 3: return '#F6EB61'; // Kuning Lemon - Suhu yang mulai hangat
-                case 4: return '#FF7F30'; // Oranye Terang - Suhu sedang panas
-                case 5: return '#E63946'; // Merah - Suhu panas
-                default: return '#CCCCCC'; // Abu-abu untuk nilai yang tidak terdefinisi
+                case 1: return '#2892C7'; // Biru Muda - Suhu dingin
+                case 2: return '#A0C29B'; // Hijau Mint - Sedikit lebih hangat
+                case 3: return '#FAFA64'; // Kuning Lemon - Suhu yang mulai hangat
+                case 4: return '#FA8D34'; // Oranye Terang - Suhu sedang panas
+                case 5: return '#E81014'; // Merah - Suhu panas
+                default: return '#2892C7'; // Abu-abu untuk nilai yang tidak terdefinisi
             }
         }
 
@@ -45,8 +45,7 @@
                 fillColor: getColor(feature.properties.gridcode), // Mengambil warna dari atribut gridcode
                 weight: 0, // Hapus outline
                 opacity: 1,
-                color: 'white', // Warna outline dihapus
-                dashArray: '3',
+                color: 'transparent', // Warna outline diatur ke transparan
                 fillOpacity: 0.7
             };
         }
