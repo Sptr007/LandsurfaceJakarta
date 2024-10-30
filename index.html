@@ -6,8 +6,13 @@
     <title>Peta LST</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
+        /* Mengatur body dan html untuk menghilangkan margin */
+        html, body {
+            height: 100%; /* Memastikan tinggi body 100% */
+            margin: 0; /* Menghapus margin */
+        }
         #map {
-            height: 600px; /* Mengatur tinggi peta */
+            height: calc(100% - 60px); /* Mengatur tinggi peta */
             width: 100%; /* Mengatur lebar peta */
         }
         .legend {
