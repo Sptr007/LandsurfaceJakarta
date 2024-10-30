@@ -67,8 +67,10 @@
         var layers = {};
         var years = [2024, 2022, 2020, 2018, 2016, 2014]; // Tahun untuk file GeoJSON
 
+        // Kontrol layer
         var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map); // Kontrol layer
 
+        // Fetch data dan tambahkan layer ke kontrol
         years.forEach(year => {
             fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
                 .then(response => response.json())
@@ -77,6 +79,21 @@
                     layerControl.addOverlay(layers[year], `Peta LST ${year}`); // Menambahkan ke kontrol
                 })
                 .catch(err => console.error(err)); // Menangani kesalahan
+        });
+
+        // Menampilkan layer yang dipilih dan menyembunyikan yang lain
+        map.on('overlayadd', function (e) {
+            for (var year in layers) {
+                if (layers.hasOwnProperty(year) && layers[year] !== e.layer) {
+                    map.removeLayer(layers[year]); // Menghapus layer yang tidak dipilih
+                }
+            }
+            map.addLayer(e.layer); // Menambahkan layer yang dipilih
+        });
+
+        // Menampilkan layer yang dihapus jika overlay dihapus
+        map.on('overlayremove', function (e) {
+            map.removeLayer(e.layer); // Menghapus layer saat overlay dihapus
         });
 
         // Fungsi untuk menambahkan legenda
@@ -99,16 +116,6 @@
 
         // Menambahkan legenda ke peta
         addLegend();
-
-        // Menampilkan layer yang dipilih dan menyembunyikan yang lain
-        map.on('overlayadd', function (e) {
-            for (var year in layers) {
-                if (layers.hasOwnProperty(year) && layers[year] !== e.layer) {
-                    map.removeLayer(layers[year]);
-                }
-            }
-            map.addLayer(e.layer);
-        });
     </script>
 </body>
 </html>
