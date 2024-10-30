@@ -35,7 +35,7 @@
                 case 3: return '#FAFA64'; // Kuning Lemon - Suhu yang mulai hangat
                 case 4: return '#FA8D34'; // Oranye Terang - Suhu sedang panas
                 case 5: return '#E81014'; // Merah - Suhu panas
-                default: return '#2892C7'; // Abu-abu untuk nilai yang tidak terdefinisi
+                default: return '#2892C7'; // Warna default untuk nilai yang tidak terdefinisi
             }
         }
 
@@ -44,9 +44,9 @@
             return {
                 fillColor: getColor(feature.properties.gridcode), // Mengambil warna dari atribut gridcode
                 weight: 0, // Hapus outline
-                opacity: 0,
+                opacity: 1,
                 color: 'transparent', // Warna outline diatur ke transparan
-                fillOpacity: 0.7
+                fillOpacity: 1 // Mengatur opacity isi menjadi 1 (tidak transparan)
             };
         }
 
