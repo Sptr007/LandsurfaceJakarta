@@ -71,7 +71,7 @@
             fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
                 .then(response => response.json())
                 .then(data => {
-                    layers[year] = L.geoJSON(data, { style: style }).addTo(map).hide();
+                    layers[year] = L.geoJSON(data, { style: style }).addTo(map).hide(); // Menyembunyikan layer awal
                 })
                 .catch(err => console.error(err)); // Menangani kesalahan
         });
@@ -80,19 +80,12 @@
         var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map);
 
         years.forEach(year => {
-            layerControl.addOverlay(layers[year], `Peta LST ${year}`, { 
-                onAdd: function() {
-                    layers[year].addTo(map);
-                },
-                onRemove: function() {
-                    map.removeLayer(layers[year]);
-                }
-            });
+            layerControl.addOverlay(layers[year], `Peta LST ${year}`, true); // Menambahkan layer ke kontrol
         });
 
         // Fungsi untuk menambahkan legenda
         function addLegend() {
-            var legend = L.control({position: 'bottomright'}); // Mengubah posisi ke kanan bawah
+            var legend = L.control({ position: 'bottomright' }); // Mengubah posisi ke kanan bawah
 
             legend.onAdd = function () {
                 var div = L.DomUtil.create('div', 'legend');
