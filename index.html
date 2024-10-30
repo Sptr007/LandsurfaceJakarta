@@ -80,7 +80,14 @@
         var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map);
 
         years.forEach(year => {
-            layerControl.addOverlay(layers[year], `Peta LST ${year}`);
+            layerControl.addOverlay(layers[year], `Peta LST ${year}`, { 
+                onAdd: function() {
+                    layers[year].addTo(map);
+                },
+                onRemove: function() {
+                    map.removeLayer(layers[year]);
+                }
+            });
         });
 
         // Fungsi untuk menambahkan legenda
