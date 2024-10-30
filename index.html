@@ -27,7 +27,6 @@
     </style>
 </head>
 <body>
-    <h1>Peta LST 2024</h1>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -74,7 +73,7 @@
 
         // Fungsi untuk menambahkan legenda
         function addLegend() {
-            var legend = L.control({position: 'topright'});
+            var legend = L.control({position: 'bottomright'}); // Mengubah posisi ke kanan bawah
 
             legend.onAdd = function () {
                 var div = L.DomUtil.create('div', 'legend');
