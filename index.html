@@ -27,11 +27,31 @@
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
+        // Fungsi untuk mengatur warna berdasarkan suhu
+        function getColor(temperature) {
+            return temperature > 30 ? '#FF0000' : // Merah untuk suhu > 30°C
+                   temperature > 25 ? '#FF7F00' : // Oranye untuk suhu > 25°C
+                   temperature > 20 ? '#FFFF00' : // Kuning untuk suhu > 20°C
+                   '#00FF00'; // Hijau untuk suhu ≤ 20°C
+        }
+
+        // Fungsi untuk styling GeoJSON
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.temperature), // Ganti dengan nama atribut suhu Anda
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.7
+            };
+        }
+
         // Menambahkan layer GeoJSON
         fetch('https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST2024.geojson')
             .then(response => response.json())
             .then(data => {
-                L.geoJSON(data).addTo(map);
+                L.geoJSON(data, { style: style }).addTo(map);
             })
             .catch(err => console.error(err)); // Menangani kesalahan
     </script>
