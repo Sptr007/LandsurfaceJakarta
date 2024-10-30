@@ -27,18 +27,22 @@
             attribution: '© OpenStreetMap'
         }).addTo(map);
 
-        // Fungsi untuk mengatur warna berdasarkan suhu
-        function getColor(temperature) {
-            return temperature > 30 ? '#FF0000' : // Merah untuk suhu > 30°C
-                   temperature > 25 ? '#FF7F00' : // Oranye untuk suhu > 25°C
-                   temperature > 20 ? '#FFFF00' : // Kuning untuk suhu > 20°C
-                   '#00FF00'; // Hijau untuk suhu ≤ 20°C
+        // Fungsi untuk mengatur warna berdasarkan gridcode
+        function getColor(gridcode) {
+            switch (gridcode) {
+                case 1: return '#FF0000'; // Merah
+                case 2: return '#FF7F00'; // Oranye
+                case 3: return '#FFFF00'; // Kuning
+                case 4: return '#00FF00'; // Hijau
+                // Tambahkan lebih banyak case sesuai dengan nilai gridcode yang Anda miliki
+                default: return '#CCCCCC'; // Abu-abu untuk nilai yang tidak terdefinisi
+            }
         }
 
         // Fungsi untuk styling GeoJSON
         function style(feature) {
             return {
-                fillColor: getColor(feature.properties.temperature), // Ganti dengan nama atribut suhu Anda
+                fillColor: getColor(feature.properties.gridcode), // Mengambil warna dari atribut gridcode
                 weight: 2,
                 opacity: 1,
                 color: 'white',
