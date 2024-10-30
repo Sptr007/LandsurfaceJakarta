@@ -64,12 +64,24 @@
         }
 
         // Menambahkan layer GeoJSON
-        fetch('https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST2024.geojson')
-            .then(response => response.json())
-            .then(data => {
-                L.geoJSON(data, { style: style }).addTo(map);
-            })
-            .catch(err => console.error(err)); // Menangani kesalahan
+        var layers = {};
+        var years = [2024, 2023, 2022, 2021, 2020]; // Tahun untuk file GeoJSON
+
+        years.forEach(year => {
+            fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
+                .then(response => response.json())
+                .then(data => {
+                    layers[year] = L.geoJSON(data, { style: style }).addTo(map).hide();
+                })
+                .catch(err => console.error(err)); // Menangani kesalahan
+        });
+
+        // Fungsi untuk menambahkan kontrol layer
+        var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map);
+
+        years.forEach(year => {
+            layerControl.addOverlay(layers[year], `Peta LST ${year}`);
+        });
 
         // Fungsi untuk menambahkan legenda
         function addLegend() {
@@ -78,11 +90,11 @@
             legend.onAdd = function () {
                 var div = L.DomUtil.create('div', 'legend');
                 div.innerHTML += '<strong>Legenda Suhu</strong><br>';
-                div.innerHTML += '<i style="background: #2892C7"></i> Suhu Dingin (22.56 - 35.62 °C)<br>';
-                div.innerHTML += '<i style="background: #A0C29B"></i> Sedikit Lebih Hangat (35.63 - 39.25 °C)<br>';
-                div.innerHTML += '<i style="background: #FAFA64"></i> Mulai Hangat (39.25 - 41.96 °C)<br>';
-                div.innerHTML += '<i style="background: #FA8D34"></i> Suhu Sedang Panas (41.96 - 44.68 °C)<br>';
-                div.innerHTML += '<i style="background: #E81014"></i> Suhu Panas (44.68 - 55.54 °C)<br>';
+                div.innerHTML += '<i style="background: #2892C7"></i> Suhu Dingin<br>';
+                div.innerHTML += '<i style="background: #A0C29B"></i> Sedikit Lebih Hangat<br>';
+                div.innerHTML += '<i style="background: #FAFA64"></i> Mulai Hangat<br>';
+                div.innerHTML += '<i style="background: #FA8D34"></i> Suhu Sedang Panas<br>';
+                div.innerHTML += '<i style="background: #E81014"></i> Suhu Panas<br>';
                 return div;
             };
 
