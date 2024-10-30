@@ -24,15 +24,12 @@
             display: inline-block;
             margin-right: 5px;
         }
-        #yearSelector {
+        select {
             position: absolute;
             top: 10px;
             left: 10px;
-            z-index: 1000; /* Agar berada di atas peta */
-            background: white;
+            z-index: 1000; /* Pastikan dropdown di atas peta */
             padding: 5px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -74,59 +71,54 @@
         // Fungsi untuk styling GeoJSON
         function style(feature) {
             return {
-                fillColor: getColor(feature.properties.gridcode), // Mengambil warna dari atribut gridcode
-                weight: 0, // Hapus outline
-                opacity: 1, // Opacity poligon
-                color: 'transparent', // Warna outline diatur ke transparan
-                fillOpacity: 1 // Mengatur opacity isi menjadi 1 (tidak transparan)
+                fillColor: getColor(feature.properties.gridcode),
+                weight: 0,
+                opacity: 1,
+                color: 'transparent',
+                fillOpacity: 1
             };
         }
 
-        // Menyimpan layer dalam objek
-        var layers = {};
+       // Menyimpan layer dalam objek
+var layers = {};
+var years = [2024, 2022, 2020, 2018, 2016, 2014]; // Tahun untuk file GeoJSON
 
-        // Fungsi untuk memuat dan menambahkan layer GeoJSON
-        function loadLayer(year) {
-            fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
-                .then(response => response.json())
-                .then(data => {
-                    layers[year] = L.geoJSON(data, {
-                        style: style,
-                        onEachFeature: function (feature, layer) {
-                            // Menambahkan popup untuk menampilkan suhu dari kolom Suhu
-                            if (feature.properties && feature.properties.Suhu) {
-                                layer.bindPopup(`Suhu: ${feature.properties.Suhu} °C`);
-                            }
-                        }
-                    }).addTo(map).hide(); // Menyembunyikan layer awal
-                })
-                .catch(err => console.error(err)); // Menangani kesalahan
+// Fungsi untuk memuat dan menambahkan layer GeoJSON
+function loadLayer(year) {
+    fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
+        .then(response => response.json())
+        .then(data => {
+            layers[year] = L.geoJSON(data, { style: style }).addTo(map).hide(); // Menyembunyikan layer awal
+            map.addLayer(layers[year]); // Menambahkan layer setelah pemuatan selesai
+        })
+        .catch(err => console.error(err)); // Menangani kesalahan
+}
+
+// Menangani pemilihan tahun dari dropdown
+document.getElementById('yearSelector').addEventListener('change', function() {
+    var selectedYear = this.value;
+
+    // Menyembunyikan semua layer terlebih dahulu
+    for (var year in layers) {
+        if (layers.hasOwnProperty(year)) {
+            map.removeLayer(layers[year]); // Menghapus layer dari peta
         }
+    }
 
-        // Menangani pemilihan tahun dari dropdown
-        document.getElementById('yearSelector').addEventListener('change', function() {
-            var selectedYear = this.value;
+    // Memuat dan menampilkan layer yang dipilih
+    if (selectedYear) {
+        if (!layers[selectedYear]) {
+            loadLayer(selectedYear); // Memuat layer jika belum ada
+        } else {
+            map.addLayer(layers[selectedYear]); // Menambahkan layer yang dipilih
+        }
+    }
+});
 
-            // Menyembunyikan semua layer terlebih dahulu
-            for (var year in layers) {
-                if (layers.hasOwnProperty(year)) {
-                    map.removeLayer(layers[year]); // Menghapus layer dari peta
-                }
-            }
 
-            // Memuat dan menampilkan layer yang dipilih
-            if (selectedYear) {
-                if (!layers[selectedYear]) {
-                    loadLayer(selectedYear); // Memuat layer jika belum ada
-                } else {
-                    map.addLayer(layers[selectedYear]); // Menambahkan layer yang dipilih
-                }
-            }
-        });
-
-        // Menambahkan legenda ke peta
+        // Menambahkan legenda
         function addLegend() {
-            var legend = L.control({position: 'bottomright'}); // Mengubah posisi ke kanan bawah
+            var legend = L.control({ position: 'bottomright' });
 
             legend.onAdd = function () {
                 var div = L.DomUtil.create('div', 'legend');
