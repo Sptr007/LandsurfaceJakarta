@@ -68,7 +68,7 @@
         var years = [2024, 2022, 2020, 2018, 2016, 2014]; // Tahun untuk file GeoJSON
 
         // Kontrol layer
-        var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map); // Kontrol layer
+        var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map);
 
         // Fungsi untuk memuat dan menambahkan layer GeoJSON
         function loadLayer(year) {
@@ -93,7 +93,8 @@
                     map.removeLayer(layers[year]); // Menghapus layer yang tidak dipilih
                 }
             }
-            map.addLayer(e.layer); // Menambahkan layer yang dipilih
+            // Memastikan layer yang dipilih ditampilkan
+            map.addLayer(e.layer);
         });
 
         // Menambahkan legenda
