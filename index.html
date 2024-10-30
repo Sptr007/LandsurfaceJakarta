@@ -10,6 +10,14 @@
             height: 600px; /* Mengatur tinggi peta */
             width: 100%; /* Mengatur lebar peta */
         }
+        .legend {
+            background: white;
+            padding: 10px;
+            line-height: 1.5;
+            color: #333;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body>
@@ -44,7 +52,7 @@
             return {
                 fillColor: getColor(feature.properties.gridcode), // Mengambil warna dari atribut gridcode
                 weight: 0, // Hapus outline
-                opacity: 1,
+                opacity: 1, // Opacity poligon
                 color: 'transparent', // Warna outline diatur ke transparan
                 fillOpacity: 1 // Mengatur opacity isi menjadi 1 (tidak transparan)
             };
@@ -57,6 +65,27 @@
                 L.geoJSON(data, { style: style }).addTo(map);
             })
             .catch(err => console.error(err)); // Menangani kesalahan
+
+        // Fungsi untuk menambahkan legenda
+        function addLegend() {
+            var legend = L.control({position: 'topright'});
+
+            legend.onAdd = function () {
+                var div = L.DomUtil.create('div', 'legend');
+                div.innerHTML += '<strong>Legenda Suhu</strong><br>';
+                div.innerHTML += '<i style="background: #2892C7"></i> Suhu Dingin (22.56 - 35.62 °C)<br>';
+                div.innerHTML += '<i style="background: #A0C29B"></i> Sedikit Lebih Hangat (35.63 - 39.25 °C)<br>';
+                div.innerHTML += '<i style="background: #FAFA64"></i> Mulai Hangat (39.25 - 41.96 °C)<br>';
+                div.innerHTML += '<i style="background: #FA8D34"></i> Suhu Sedang Panas (41.96 - 44.68 °C)<br>';
+                div.innerHTML += '<i style="background: #E81014"></i> Suhu Panas (44.68 - 55.54 °C)<br>';
+                return div;
+            };
+
+            legend.addTo(map);
+        }
+
+        // Menambahkan legenda ke peta
+        addLegend();
     </script>
 </body>
 </html>
