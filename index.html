@@ -93,11 +93,6 @@
                 .catch(err => console.error(err)); // Menangani kesalahan
         }
 
-        // Fetch data untuk setiap tahun
-        years.forEach(year => {
-            loadLayer(year); // Memuat layer ketika dibutuhkan
-        });
-
         // Menangani pemilihan tahun dari dropdown
         document.getElementById('yearSelector').addEventListener('change', function() {
             var selectedYear = this.value;
@@ -109,9 +104,13 @@
                 }
             }
 
-            // Menampilkan layer yang dipilih
+            // Memuat dan menampilkan layer yang dipilih
             if (selectedYear) {
-                map.addLayer(layers[selectedYear]); // Menambahkan layer yang dipilih
+                if (!layers[selectedYear]) {
+                    loadLayer(selectedYear); // Memuat layer jika belum ada
+                } else {
+                    map.addLayer(layers[selectedYear]); // Menambahkan layer yang dipilih
+                }
             }
         });
 
