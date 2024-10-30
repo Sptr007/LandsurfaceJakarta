@@ -91,11 +91,6 @@
             map.addLayer(e.layer); // Menambahkan layer yang dipilih
         });
 
-        // Menampilkan layer yang dihapus jika overlay dihapus
-        map.on('overlayremove', function (e) {
-            map.removeLayer(e.layer); // Menghapus layer saat overlay dihapus
-        });
-
         // Fungsi untuk menambahkan legenda
         function addLegend() {
             var legend = L.control({ position: 'bottomright' });
