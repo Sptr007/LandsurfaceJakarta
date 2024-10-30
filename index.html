@@ -24,9 +24,25 @@
             display: inline-block;
             margin-right: 5px;
         }
+        select {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000; /* Pastikan dropdown di atas peta */
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
+    <select id="yearSelector">
+        <option value="">Pilih Tahun</option>
+        <option value="2024">2024</option>
+        <option value="2022">2022</option>
+        <option value="2020">2020</option>
+        <option value="2018">2018</option>
+        <option value="2016">2016</option>
+        <option value="2014">2014</option>
+    </select>
     <div id="map"></div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -67,16 +83,12 @@
         var layers = {};
         var years = [2024, 2022, 2020, 2018, 2016, 2014]; // Tahun untuk file GeoJSON
 
-        // Kontrol layer
-        var layerControl = L.control.layers(null, {}, { collapsed: false }).addTo(map);
-
         // Fungsi untuk memuat dan menambahkan layer GeoJSON
         function loadLayer(year) {
             fetch(`https://raw.githubusercontent.com/Sptr007/LandsurfaceJakarta/main/LST${year}.geojson`)
                 .then(response => response.json())
                 .then(data => {
                     layers[year] = L.geoJSON(data, { style: style }).addTo(map).hide(); // Menyembunyikan layer awal
-                    layerControl.addOverlay(layers[year], `Peta LST ${year}`); // Menambahkan ke kontrol
                 })
                 .catch(err => console.error(err)); // Menangani kesalahan
         }
@@ -86,15 +98,21 @@
             loadLayer(year); // Memuat layer ketika dibutuhkan
         });
 
-        // Menampilkan layer yang dipilih dan menyembunyikan yang lain
-        map.on('overlayadd', function (e) {
+        // Menangani pemilihan tahun dari dropdown
+        document.getElementById('yearSelector').addEventListener('change', function() {
+            var selectedYear = this.value;
+
+            // Menyembunyikan semua layer terlebih dahulu
             for (var year in layers) {
-                if (layers.hasOwnProperty(year) && layers[year] !== e.layer) {
-                    map.removeLayer(layers[year]); // Menghapus layer yang tidak dipilih
+                if (layers.hasOwnProperty(year)) {
+                    map.removeLayer(layers[year]); // Menghapus layer dari peta
                 }
             }
-            // Memastikan layer yang dipilih ditampilkan
-            map.addLayer(e.layer);
+
+            // Menampilkan layer yang dipilih
+            if (selectedYear) {
+                map.addLayer(layers[selectedYear]); // Menambahkan layer yang dipilih
+            }
         });
 
         // Menambahkan legenda
