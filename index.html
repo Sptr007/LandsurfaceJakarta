@@ -9,11 +9,11 @@
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%; /* Mengatur tinggi body dan html untuk mengisi layar */
+            height: 100%;
         }
         #map {
-            height: calc(100% - 0px); /* Mengatur tinggi peta mengisi sisa layar */
-            width: 100%; /* Mengatur lebar peta */
+            height: 100%;
+            width: 100%;
         }
         .legend {
             background: white;
@@ -32,15 +32,12 @@
         #controls {
             position: absolute;
             top: 10px;
-            left: 10px; /* Mengatur posisi kontrol */
-            z-index: 1000; /* Pastikan kontrol di atas peta */
+            left: 10px;
+            z-index: 1000;
             background: white;
             padding: 10px;
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0,0,0,0.5);
-        }
-        .leaflet-control-zoom {
-            bottom: -50px; /* Menurunkan kontrol zoom */
         }
     </style>
 </head>
@@ -64,11 +61,26 @@
         // Inisialisasi peta
         var map = L.map('map').setView([-6.2, 106.8], 10); // Koordinat Jakarta
 
-        // Menambahkan layer peta dasar (OpenStreetMap)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Basemap OSM (OpenStreetMap)
+        var osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
-        }).addTo(map);
+        }).addTo(map); // Menambahkan OSM ke peta sebagai default
+
+        // Basemap Satelit
+        var satelliteLayer = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 19,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+            attribution: '© Google'
+        });
+
+        // Menambahkan kontrol layer untuk memilih antara OSM dan Satelit
+        var baseMaps = {
+            "Peta Dasar": osmLayer,
+            "Peta Satelit": satelliteLayer
+        };
+
+        L.control.layers(baseMaps).addTo(map);
 
         // Fungsi untuk mengatur warna berdasarkan suhu
         function getColor(gridcode) {
